@@ -1,0 +1,229 @@
+<app-header></app-header>
+<div id="layoutSidenav_content">
+    <main>
+        <div class="container px-0 pt-4 mt-4">
+            <div class="row">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Address Line 1</th>
+                            <th scope="col">Address Line 2</th>
+                            <th scope="col">Province</th>
+                            <th scope="col">Subrub</th>
+                            <th scope="col">Type</th>
+                            <th scope="col">Rent</th>
+                            <th scope="col">Electricity Prepaid</th>
+                            <th scope="col">Water Prepaid</th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"></th>
+                            <th scope="col"><a class = "btn btn-lg" (click)="openModal(undefined, 'addPropertyModal')"><i class="fa-solid fa-circle-plus">Add Property</i></a></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let property of properties">
+                            <td>{{ property.propertyID }}</td>
+                            <td>{{ property.addressLine1}}</td>
+                            <td>{{ property.addressLine2}}</td>
+                            <td>{{ property.province}}</td>
+                            <td>{{ property.suburb}}</td>
+                            <td>{{ property.type}}</td>
+                            <td>{{ property.rent | currency:'R '}}</td>
+                            <td>{{ property.electricity_prepaid}}</td>
+                            <td>{{ property.water_prepaid}}</td>
+                            <td><a class = "btn btn-outline-dark" (click)="openModal(property, 'tenantViewModal')">View Tenant</a></td>
+                            <td><a class="btn" (click)="openModal(property, 'tenantAddModal')"><i class="fa-solid fa-user-plus">Add Tenant</i></a></td>
+                            <td><a class="btn" (click)="openModal(property, 'deleteModal')"><i class="fa fa-trash">Delete</i></a></td>
+                            <td><a class="btn" (click)="openModal(property, 'editModal')"><i class="fa-solid fa-pen-to-square">Edit</i></a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</div>
+
+<jw-modal id="addPropertyModal">
+    <h1>Property Form</h1>
+    <form #addForm="ngForm" (ngSubmit)="onAdd(addForm)">
+        <div class="form-group">
+            <label for="addressLine1">Address Line 1</label>
+            <input type="text" ngModel name="addressLine1" class="form-control" id="addressLine1" placeholder="Address"
+                required>
+        </div>
+        <div class="form-group">
+            <label for="addressLine2">Address Line 2</label>
+            <input type="text" ngModel name="addressLine2" class="form-control" id="addressLine2"
+                placeholder="Address">
+        </div>
+        <div class="form-group">
+            <label for="province">Province</label>
+            <select ngModel name="province" class="form-control" id="province" required>
+                <option *ngFor="let province of provinces; let i = index">
+                    {{province}}
+                </option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="suburb">Subrub</label>
+            <input type="text" ngModel name="suburb" class="form-control" id="suburb" placeholder="Subrub" required>
+        </div>
+        <div class="form-group">
+            <label for="type">Type</label>
+            <select ngModel name="type" class="form-control" id="type" required>
+                <option *ngFor="let type of propertyTypes; let i = index">
+                    {{type}}
+                </option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="rent">Rent</label>
+            <input type="number" ngModel name="rent" class="form-control" id="rent" placeholder="Amount" required>
+        </div>
+        <div class="form-group">
+            <label for="electricity_prepaid">Electricity Prepaid</label>
+            <select ngModel name="electricity_prepaid" class="form-control" id="electricity_prepaid" required>
+                <option [value]="true">
+                    Yes
+                </option>
+                <option [value]="false">
+                    No
+                </option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="water_prepaid">Water Prepaid</label>
+            <select ngModel name="water_prepaid" class="form-control" id="water_prepaid" required>
+                <option [value]="true">
+                    Yes
+                </option>
+                <option [value]="false">
+                    No
+                </option>
+            </select>
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="add-property-form" class="btn btn-dark" (click)="closeModal('addPropertyModal');">Close</button>
+            <button [disabled]="addForm.invalid" type="submit" class="btn btn-primary">Add</button>
+        </div>
+    </form>
+</jw-modal>
+
+<jw-modal id="editModal">
+    <h1>Update Form</h1>
+    <form #editForm="ngForm">
+            <input type="hidden" ngModel="{{editProperty?.propertyID}}" name="propertyID" class="form-control" id="propertyID">
+        <div class="form-group">
+            <label for="addressLine1">Address Line 1</label>
+            <input type="text" ngModel="{{editProperty?.addressLine1}}" name="addressLine1" class="form-control" id="addressLine1" placeholder="Address"
+                required>
+        </div>
+        <div class="form-group">
+            <label for="addressLine2">Address Line 2</label>
+            <input type="text" ngModel="{{editProperty?.addressLine2}}" name="addressLine2" class="form-control" id="addressLine2"
+                placeholder="Address">
+        </div>
+        <div class="form-group">
+            <label for="province">Province</label>
+            <select ngModel="{{editProperty?.province}}" name="province" class="form-control" id="province" required>
+                <option *ngFor="let province of provinces; let i = index">
+                    {{province}}
+                </option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="suburb">Subrub</label>
+            <input type="text" ngModel="{{editProperty?.suburb}}" name="suburb" class="form-control" id="suburb" placeholder="Subrub" required>
+        </div>
+        <div class="form-group">
+            <label for="type">Type</label>
+            <select ngModel="{{editProperty?.type}}" name="type" class="form-control" id="type" required>
+                <option *ngFor="let type of propertyTypes; let i = index">
+                    {{type}}
+                </option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="rent">Rent</label>
+            <input type="number" ngModel="{{editProperty?.rent}}" name="rent" class="form-control" id="rent" placeholder="Amount" required>
+        </div>
+        <div class="form-group">
+            <label for="electricity_prepaid">Electricity Prepaid</label>
+            <select ngModel="{{editProperty?.electricity_prepaid}}" name="electricity_prepaid" class="form-control" id="electricity_prepaid" required>
+                <option [value]="true">
+                    Yes
+                </option>
+                <option [value]="false">
+                    No
+                </option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="water_prepaid">Water Prepaid</label>
+            <select ngModel="{{editProperty?.water_prepaid}}" name="water_prepaid" class="form-control" id="water_prepaid" required>
+                <option [value]="true">
+                    Yes
+                </option>
+                <option [value]="false">
+                    No
+                </option>
+            </select>
+        </div>
+        <div class="modal-footer">
+            <button type="button" id="edit-property-form" class="btn btn-dark" (click)="closeModal('editModal');">Close</button>
+            <button [disabled]="editForm.invalid" type="submit" class="btn btn-primary" (click)="onUpdate(editForm)">Save Changes</button>
+        </div>
+    </form>
+</jw-modal>
+
+<jw-modal id="tenantViewModal">
+    <form #tenantForm="ngForm" *ngFor="let viewTenant of viewTenant">
+        <h2>Tenant: {{viewTenant.tenantID}}</h2>
+            <input type="hidden" ngModel="{{viewTenant.tenantID}}" name="tenantID" class="form-control" id="tenantID">
+        <div class="form-group">
+            <label for="firstName">First Name</label>
+            <input type="text" ngModel="{{viewTenant.firstName}}" name="firstName" class="form-control" id="firstName" readonly>
+        </div>
+        <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <input type="text" ngModel="{{viewTenant.lastName}}" name="lastName" class="form-control" id="lastName" readonly>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="text" ngModel="{{viewTenant.email}}" name="email" class="form-control" id="email" readonly>
+        </div>
+        <div class="form-group">
+            <label for="contactNo">Contact No.</label>
+            <input type="text" ngModel="{{viewTenant.contactNo}}" name="contactNo" class="form-control" id="contactNo" readonly>
+        </div>
+        <div class="form-group">
+            <label for="dob">Date of Birth</label>
+            <input type="date" ngModel="{{viewTenant.dob}}" name="dob" class="form-control" id="dob" readonly>
+        </div>
+        <div class="pt-4 modal-footer">
+            <a class="btn btn-primary" (click)="deletePropertyTenantWarningAlert(propertyID!, viewTenant.tenantID)">Remove Tenant</a>
+        </div>   
+    </form>
+    <div class="modal-footer">
+        <button type="button" id="view-tenant-form" class="btn btn-dark" (click)="closeModal('tenantViewModal');">Close</button>
+    </div>
+</jw-modal>
+
+<jw-modal id="tenantAddModal">
+    <form #tenantAddForm="ngForm">
+        <input type="hidden" ngModel="{{property?.propertyID}}" name="propertyID" class="form-control" id="propertyID">
+        <div class="form-group">
+            <label for="province">Tenants</label>
+            <select ngModel name="tenantID" class="form-control" id="tenantID" required>
+                <option *ngFor="let tenant of tenants; let i = index" value="{{tenant.tenantID}}">
+                    {{tenant.firstName}} {{tenant.lastName}}
+                </option>
+            </select>
+        </div>
+    </form>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" (click)="onAddTenant(tenantAddForm)">Add</button>
+        <button type="button" id="add-tenant-form" class="btn btn-dark" (click)="closeModal('tenantAddModal');">Close</button>
+    </div>
+</jw-modal>

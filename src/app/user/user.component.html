@@ -1,0 +1,30 @@
+<app-header></app-header>
+<div id="layoutSidenav_content">
+    <main>
+        <div class="container px-0 pt-4">
+            <div class="row mt-4">
+                <div class="col-12 col-lg-12">
+                    <div class="mt-4">
+                        <div class="row text-600 text-white bgc-default-tp1 py-25">
+                            <div class="d-none d-sm-block col-1">#</div>
+                            <div class="col-9 col-sm-5">First Name</div>
+                            <div class="d-none d-sm-block col-4 col-sm-2">Last Name</div>
+                            <div class="d-none d-sm-block col-sm-2">contactNo</div>
+                            <div class="col-2">email</div>
+                        </div>
+
+                        <div *ngFor="let user of users" class="text-95 text-secondary-d3">
+                            <div class="row mb-2 mb-sm-0 py-25">
+                                <div class="d-none d-sm-block col-1">{{user?.userID}}</div>
+                                <div class="col-9 col-sm-5">{{user?.firstName}}</div>
+                                <div class="d-none d-sm-block col-2">{{user?.lastName}}</div>
+                                <div class="d-none d-sm-block col-2 text-95">{{user?.contactNo}}</div>
+                                <div class="col-2 text-secondary-d2">{{user?.email}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
